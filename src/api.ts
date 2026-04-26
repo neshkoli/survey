@@ -88,7 +88,9 @@ export async function submitAnswers(
   try {
     res = await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      // Keep this a "simple request" for Apps Script. application/json triggers
+      // a browser CORS preflight, and Apps Script Web Apps do not handle OPTIONS.
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify(body),
     });
   } catch (networkErr) {
