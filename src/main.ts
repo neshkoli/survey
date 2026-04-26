@@ -1,6 +1,6 @@
 import "./style.css";
 import { fetchSchema, submitAnswers } from "./api";
-import { resolveTabName, useMockData } from "./config";
+import { isLiveToSheets, resolveTabName } from "./config";
 import { getFormParam } from "./query";
 import { renderSurvey, setSubmitLoading } from "./renderForm";
 
@@ -70,11 +70,31 @@ function showToastError(message: string): void {
   setTimeout(() => wrap.remove(), 5000);
 }
 
-function addMockBanner(): void {
-  const b = document.createElement("p");
-  b.className = "text-center text-xs text-base-content/50 py-1 mb-0";
-  b.textContent = "מצב mock: הנתונים מגיעים מ־src/mock/surveys.ts (בלי Google Sheets).";
-  app.appendChild(b);
+/** Shown when submissions do not go to Google Sheets. */
+function addDataSourceBanner(): void {
+  if (isLiveToSheets()) {
+    return;
+  }
+  const wrap = document.createElement("div");
+  wrap.className = "max-w-2xl mx-auto w-full px-2 sm:px-4";
+  if (import.meta.env.PROD) {
+    const a = document.createElement("div");
+    a.setAttribute("role", "status");
+    a.className = "alert alert-warning text-right text-sm shadow-sm";
+    a.innerHTML =
+      "<span><strong>הנתונים לא נשמרים ב־Google Sheets</strong> — האתר נבנה בלי <span dir=\"ltr\">VITE_GAS_BASE_URL</span> או עם מצב הדמיה. " +
+      "כדי לראות שורות בטאב <span dir=\"ltr\">libi-responses</span>: (1) פרסו Apps Script, הגדירו <span dir=\"ltr\">SPREADSHEET_ID</span> בפרויקט, " +
+      "(2) ב־GitHub: Settings → Secrets and variables → Actions — הוסיפו secret בשם <span dir=\"ltr\">VITE_GAS_BASE_URL</span> עם כתובת ה־Web App המלאה, " +
+      "(3) היריץו שוב את ה־workflow <strong>Deploy to GitHub Pages</strong> (או דחפו commit). " +
+      "אחרי שליחה, בקונסול (F12) — אם מופיע <code dir=\"ltr\" class=\"px-1 bg-base-300 rounded\">[submit] NOT saved</code>, השורה לא הוכנסה לגיליון.</span>";
+    wrap.appendChild(a);
+  } else {
+    const p = document.createElement("p");
+    p.className = "text-center text-xs text-base-content/50 py-1";
+    p.textContent =
+      "מצב מקומי: נתוני mock / בלי GAS — שליחה לא נרשמת בגיליון עד ש־VITE_GAS_BASE_URL מוגדר ב־.env.";
+  }
+  app.appendChild(wrap);
 }
 
 async function run(): Promise<void> {
@@ -100,9 +120,7 @@ async function run(): Promise<void> {
   }
   app.replaceChildren();
 
-  if (useMockData()) {
-    addMockBanner();
-  }
+  addDataSourceBanner();
 
   renderSurvey(
     app,

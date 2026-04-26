@@ -61,7 +61,11 @@ export async function submitAnswers(
 ): Promise<void> {
   if (useMockData() || !gasBaseUrl()) {
     await new Promise((r) => setTimeout(r, 500));
-    console.log("[mock submit]", { form: formParam, tab: tabName, answers });
+    // This is not an error: the production build was made without GAS in env, or mock is on.
+    console.info(
+      "[submit] DRY-RUN: nothing sent to Google Sheets. Add VITE_GAS_BASE_URL to the GitHub build (or .env) and rebuild. Data that would be saved:",
+      { form: formParam, tab: tabName, answers },
+    );
     return;
   }
 

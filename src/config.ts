@@ -20,3 +20,8 @@ export function gasBaseUrl(): string | undefined {
   const u = import.meta.env.VITE_GAS_BASE_URL?.replace(/\/$/, "");
   return u || undefined;
 }
+
+/** True when the app will call Apps Script (not only mock) for schema + submit. */
+export function isLiveToSheets(): boolean {
+  return !useMockData() && Boolean(gasBaseUrl());
+}

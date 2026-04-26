@@ -38,7 +38,16 @@ npm run dev     # Vite, ברירת מחדל mock בלי GAS
 ## GitHub Pages
 
 - Repository → **Settings → Pages** → **GitHub Actions** (מקור הפריסה).
-- ה-workflow ב-`.github/workflows/pages.yml` בונה `dist` ומפרסם. הוסיפו **Secrets** (אופציונלי): `VITE_GAS_BASE_URL`, `VITE_SUBMIT_TOKEN` — יוזרקו בזמן `npm run build` ב-CI.
+- ה-workflow ב-`.github/workflows/pages.yml` בונה `dist` ומפרסם. **חובה לשמירה בגיליון:** `VITE_GAS_BASE_URL` = כתובת ה־Web App (ב־**Repository secrets**). בלי secret זה, ה-build נטען במצב הדמיה ו־**לא נרשמות שורות** ב־`libi-responses`.  
+  אופציונלי: `VITE_SUBMIT_TOKEN` אם ב־GAS הוגדר `SUBMIT_TOKEN`.
+
+#### לא מופיעות תוצאות ב־Google Sheet?
+
+1. ב־[Actions](https://github.com/neshkoli/survey/actions) ודאו שהפריסה האחרונה **אחרי** הוספת ה-secret הצליחה.  
+2. **Secrets → Actions → `VITE_GAS_BASE_URL`**: `https://script.google.com/macros/s/.../exec` (מפריסת Apps Script). **אל** תשימו `?` בסוף.  
+3. ב-Apps Script: `SPREADSHEET_ID` של [הגיליון](https://docs.google.com/spreadsheets/d/1fGwqmm73NGzWmIgx542mFt6tf0jtTaXxxbHa_8FF6lY/edit), Web App "Anyone" / Execute as you.  
+4. בדפדפן (F12) — אם אחרי שליחה מופיע `[submit] NOT saved to Google Sheets`, האתר עדיין **לא** משתמש ב־GAS.  
+5. בקונסול, אם יש שגיאה אדומה `[submit] failed` — בדקו את `message` (אימות, `SUBMIT_TOKEN`, CORS, וכו׳).
 
 ## ביטחון ומגבלות
 

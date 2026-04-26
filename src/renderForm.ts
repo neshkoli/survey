@@ -183,11 +183,11 @@ export function renderSurvey(
   wrap.className = "survey-card rounded-3xl p-5 sm:p-8 space-y-5";
   if (schema.heroImageUrl) {
     const fig = document.createElement("figure");
-    fig.className = "w-full";
+    fig.className = "w-full -mt-1 overflow-hidden rounded-2xl";
     const img = document.createElement("img");
     img.src = schema.heroImageUrl;
     img.alt = schema.title;
-    img.className = "w-full max-h-56 object-cover rounded-box";
+    img.className = "w-full max-h-56 sm:max-h-72 object-cover object-center";
     fig.appendChild(img);
     wrap.appendChild(fig);
   }

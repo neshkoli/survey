@@ -1,4 +1,5 @@
 import type { SurveySchema } from "../types";
+import libiHero from "../libi.jpeg";
 
 /**
  * מידע לדוגמה — תואם למבנה שיוחזר מ-Apps Script (action=schema).
@@ -89,6 +90,7 @@ export const MOCK_SCHEMAS: Record<string, SurveySchema> = {
   libi: {
     form: "libi",
     title: "מסלול לִבִּי — אמית רננים",
+    heroImageUrl: libiHero,
     subtitle: `בשנת הלימודים תשפ"ז נפתח באמית רננים מסלול לבנות שרוצות יותר!
 • תוספת שעות קודש
 • לימוד ברמה גבוהה ובהעמקה
