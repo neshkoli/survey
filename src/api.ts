@@ -32,12 +32,13 @@ function submitUrlBase(): string {
   return u.toString();
 }
 
-function responsesUrl(tabName: string): string {
+function responsesUrl(tabName: string, password: string): string {
   const base = gasBaseUrl();
   if (!base) throw new Error("VITE_GAS_BASE_URL is not set");
   const u = new URL(base);
   u.searchParams.set("action", "responses");
   u.searchParams.set("form", tabName);
+  u.searchParams.set("password", password);
   return u.toString();
 }
 
@@ -63,14 +64,17 @@ export async function fetchSchema(formParam: string): Promise<SurveySchema> {
   return parseJsonResponse(data);
 }
 
-export async function fetchResponses(formParam: string): Promise<ResponsesPayload> {
+export async function fetchResponses(
+  formParam: string,
+  password: string,
+): Promise<ResponsesPayload> {
   const tabName = resolveTabName(formParam);
 
   if (useMockData() || !gasBaseUrl()) {
     throw new Error("VITE_GAS_BASE_URL is required to load responses");
   }
 
-  const res = await fetch(responsesUrl(tabName), { method: "GET" });
+  const res = await fetch(responsesUrl(tabName, password), { method: "GET" });
   const data: unknown = await res.json();
   const o = data as GasErrorPayload & ResponsesPayload;
   if (!res.ok || o.error) {

@@ -71,6 +71,40 @@ function showToastError(message: string): void {
   setTimeout(() => wrap.remove(), 5000);
 }
 
+function showResponsesPasswordForm(
+  onSubmit: (password: string) => void,
+  error?: string,
+): void {
+  app.replaceChildren();
+  const outer = document.createElement("div");
+  outer.className = "max-w-md mx-auto p-4 sm:p-6";
+  const form = document.createElement("form");
+  form.className = "survey-card rounded-3xl p-5 sm:p-8 space-y-4 text-right";
+  form.innerHTML = `
+    <h1 class="text-2xl font-bold text-primary text-center">צפייה בתגובות</h1>
+    <p class="text-sm text-base-content/70 text-center">הכניסו סיסמה כדי להציג את טבלת התגובות.</p>
+    <label class="form-control w-full">
+      <span class="label-text mb-1">סיסמה</span>
+      <input id="responses-password" class="input input-bordered w-full" type="password" autocomplete="current-password" autofocus />
+    </label>
+    <button class="btn btn-primary w-full" type="submit">הצג תגובות</button>
+  `;
+  if (error) {
+    const alert = document.createElement("div");
+    alert.setAttribute("role", "alert");
+    alert.className = "alert alert-error text-sm";
+    alert.textContent = error;
+    form.insertBefore(alert, form.querySelector("label"));
+  }
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const input = form.querySelector<HTMLInputElement>("#responses-password");
+    onSubmit(input?.value.trim() || "");
+  });
+  outer.appendChild(form);
+  app.appendChild(outer);
+}
+
 /** Shown when submissions do not go to Google Sheets. */
 function addDataSourceBanner(): void {
   if (isLiveToSheets()) {
@@ -101,19 +135,32 @@ function addDataSourceBanner(): void {
 async function run(): Promise<void> {
   const responsesParam = getResponsesParam();
   if (responsesParam) {
-    const loading = document.createElement("div");
-    loading.className = "p-8 text-center";
-    loading.innerHTML =
-      '<span class="loading loading-spinner loading-lg" aria-label="טוען"></span><p class="mt-2 opacity-80">טוען תגובות…</p>';
-    app.appendChild(loading);
+    const loadResponses = async (password: string): Promise<void> => {
+      if (!password) {
+        showResponsesPasswordForm(loadResponses, "יש להזין סיסמה.");
+        return;
+      }
 
-    try {
-      const responses = await fetchResponses(responsesParam);
-      document.title = `תגובות: ${responses.title}`;
-      renderResponses(app, responses);
-    } catch (e) {
-      showError(e instanceof Error ? e.message : "שגיאה בטעינת התגובות");
-    }
+      const loading = document.createElement("div");
+      app.replaceChildren();
+      loading.className = "p-8 text-center";
+      loading.innerHTML =
+        '<span class="loading loading-spinner loading-lg" aria-label="טוען"></span><p class="mt-2 opacity-80">טוען תגובות…</p>';
+      app.appendChild(loading);
+
+      try {
+        const responses = await fetchResponses(responsesParam, password);
+        document.title = `תגובות: ${responses.title}`;
+        renderResponses(app, responses);
+      } catch (e) {
+        showResponsesPasswordForm(
+          loadResponses,
+          e instanceof Error ? e.message : "שגיאה בטעינת התגובות",
+        );
+      }
+    };
+
+    showResponsesPasswordForm(loadResponses);
     return;
   }
 

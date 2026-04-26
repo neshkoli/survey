@@ -41,7 +41,7 @@ function handleRequest_(method, query, body) {
     return schema_(String(query.form || "").trim());
   }
   if (method === "GET" && action === "responses") {
-    return responses_(String(query.form || "").trim());
+    return responses_(String(query.form || "").trim(), query);
   }
   if (method === "POST" && (action === "submit" || (body && body.form && body.answers != null))) {
     if (!body || !body.form) {
@@ -108,7 +108,10 @@ function submit_(form, answers, body, query) {
   return jsonOut_({ ok: true }, 200);
 }
 
-function responses_(form) {
+function responses_(form, query) {
+  var authErr = requireResponsesPassword_(query);
+  if (authErr) return authErr;
+
   if (!form) {
     return jsonOut_({ error: "bad_request", message: "form parameter required" }, 400);
   }
@@ -140,6 +143,20 @@ function responses_(form) {
   }
 
   return jsonOut_({ form: form, title: def.title || "Survey", fields: def.fields || [], rows: rows }, 200);
+}
+
+function requireResponsesPassword_(query) {
+  var expected = PropertiesService.getScriptProperties().getProperty("RESPONSES_PASSWORD") || "orli1234";
+  var got = query && query.password ? String(query.password) : "";
+  if (got === String(expected)) {
+    return null;
+  }
+  return jsonOut_({ error: "forbidden", message: "סיסמה שגויה" }, 403);
+}
+
+function setResponsesPassword(password) {
+  PropertiesService.getScriptProperties().setProperty("RESPONSES_PASSWORD", String(password || ""));
+  return "OK";
 }
 
 function requireTokenIfSet_(body, query) {
