@@ -6,7 +6,8 @@ The official tool is [**@google/clasp**](https://github.com/google/clasp) (insta
 
 ## One-time: enable API + log in
 
-1. Open [script.google.com/home/usersettings](https://script.google.com/home/usersettings) → turn **Google Apps Script API** **On**.
+1. Open [script.google.com/home/usersettings](https://script.google.com/home/usersettings) → turn **Google Apps Script API** **On**.  
+   If you skip this, `gas:push` fails with: *User has not enabled the Apps Script API* (HTTP 403). After turning it on, wait 1–2 minutes and retry.
 2. In the project root:
    ```bash
    npm install
