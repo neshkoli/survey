@@ -182,6 +182,12 @@ function readLibiThreeCol_(sh) {
       continue;
     }
     var fLower = field.toLowerCase();
+    if (isHeroImageRow_(fLower, t)) {
+      if (text.trim()) {
+        hero = normalizeImageUrl_(text.trim());
+      }
+      continue;
+    }
     if (fLower === "title" && t.indexOf("short") >= 0) {
       if (text.trim()) {
         title = text.trim();
@@ -212,6 +218,32 @@ function readLibiThreeCol_(sh) {
     }
   }
   return { title: title, subtitle: subtitle, hero: hero, fields: fields, footer: footer };
+}
+
+function isHeroImageRow_(fieldName, typeName) {
+  return (
+    fieldName === "image" ||
+    fieldName === "hero" ||
+    fieldName === "heroimage" ||
+    fieldName === "hero_image" ||
+    fieldName === "headerimage" ||
+    fieldName === "header_image" ||
+    fieldName === "תמונה" ||
+    typeName === "image" ||
+    typeName === "תמונה"
+  );
+}
+
+function normalizeImageUrl_(url) {
+  var s = String(url || "").trim();
+  var idMatch =
+    s.match(/\/file\/d\/([A-Za-z0-9_-]+)/) ||
+    s.match(/[?&]id=([A-Za-z0-9_-]+)/) ||
+    s.match(/\/d\/([A-Za-z0-9_-]+)/);
+  if (idMatch && s.indexOf("drive.google.com") >= 0) {
+    return "https://drive.google.com/thumbnail?id=" + idMatch[1] + "&sz=w1600";
+  }
+  return s;
 }
 
 function fieldIdFromLibiField_(field, rowNum) {
