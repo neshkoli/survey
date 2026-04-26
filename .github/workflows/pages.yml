@@ -28,6 +28,8 @@ jobs:
           npm ci
           npm run build
           cp dist/index.html dist/404.html
+          mkdir -p dist/libi
+          cp dist/index.html dist/libi/index.html
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_PAGES_CUSTOM_DOMAIN: survey.eshkoli.com
