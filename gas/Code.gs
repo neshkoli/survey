@@ -205,7 +205,7 @@ function readLibiThreeCol_(sh) {
     if (t === "description" || t === "תיאור") {
       continue;
     }
-    if (fLower === "title" || t === "short text" || t === "short_text" || t === "long text" || t === "long_text" || t.indexOf("short") === 0) {
+    if (t === "short text" || t === "short_text" || t === "long text" || t === "long_text" || t.indexOf("short") === 0) {
       var fid = fieldIdFromLibiField_(field, r);
       var isRemark = fLower === "remark" || fLower === "הערה" || fLower === "הערות";
       var isLong = t === "long text" || t === "long_text" || isRemark;
@@ -236,6 +236,7 @@ function isHeroImageRow_(fieldName, typeName) {
 
 function isFormTitleRow_(fieldName, typeName) {
   return (
+    fieldName === "title" ||
     fieldName === "form_title" ||
     fieldName === "formtitle" ||
     typeName === "form_title" ||

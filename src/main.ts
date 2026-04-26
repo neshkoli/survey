@@ -31,7 +31,7 @@ function showNoFormState(): void {
   const wrap = document.createElement("div");
   wrap.className = "p-4 max-w-2xl mx-auto space-y-3 text-right";
   wrap.innerHTML = `
-    <h1 class="text-2xl font-bold">בחרו סקר</h1>
+    <h1 class="text-2xl font-bold">בחרו שאלון</h1>
     <p class="opacity-80">הוסיפו לכתובת את פרמטר <code class="px-1 bg-base-300 rounded">?form=</code> — לדוגמה:</p>
     <ul class="list-disc list-inside space-y-1 text-sm">
       <li><a class="link link-primary" href="?form=libi">?form=libi</a> — מסלול לִבִּי (טאב <span dir="ltr">libi</span> בגיליון; תשובות ל-<span dir="ltr">libi-responses</span>)</li>
@@ -118,6 +118,7 @@ async function run(): Promise<void> {
     showError(e instanceof Error ? e.message : "שגיאה בטעינת הטופס");
     return;
   }
+  document.title = schema.title;
   app.replaceChildren();
 
   addDataSourceBanner();
