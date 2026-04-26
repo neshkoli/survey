@@ -1,5 +1,7 @@
 node_modules
 dist
+# clasp: your Apps Script project id (secret-ish); copy from .clasp.json.example
+.clasp.json
 .DS_Store
 *.local
 .env

@@ -33,7 +33,8 @@ npm run dev     # Vite, ברירת מחדל mock בלי GAS
 
 ## Apps Script
 
-התקנת הפרויקט והזרקת ה-ID: [`gas/README.md`](gas/README.md) ו-`gas/Code.gs`.
+- **מול שורת פקודה (clasp):** [`docs/CLASP.md`](docs/CLASP.md) — `npm run gas:push` / `npm run gas:deploy`.
+- **מול ממשק:** [`gas/README.md`](gas/README.md) ו-`gas/Code.gs`.
 
 - **CORS / בדיקה:** לאחר הפריסה, פתחו בדפדפן את `…/exec?action=schema&form=שם_הטאב` (שם הטאב = כפי ב-Google Sheet) וודאו שמתקבל JSON, ואז הטעינה מאתר ה-Pages (או `localhost` אחרי שמירת `VITE_GAS` ב-`.env`).
 

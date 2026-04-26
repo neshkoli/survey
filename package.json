@@ -6,9 +6,17 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "gas:login": "clasp login",
+    "gas:logout": "clasp logout",
+    "gas:open": "clasp open",
+    "gas:pull": "clasp pull",
+    "gas:push": "clasp push -f",
+    "gas:deploy": "clasp deploy -i AKfycbz3x9d7hubd1neGU68jyq5FxYyT7mgD7a_Hh26QpozM7t9DBrTlIPcMk3kjNuI_t_RH -d survey-backend",
+    "gas:deployments": "clasp deployments"
   },
   "devDependencies": {
+    "@google/clasp": "^2.4.2",
     "autoprefixer": "^10.4.20",
     "daisyui": "^4.12.22",
     "postcss": "^8.4.49",

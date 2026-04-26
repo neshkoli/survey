@@ -1,5 +1,9 @@
 # Google Apps Script (backend)
 
+**CLI: [clasp](https://github.com/google/clasp)** — from the repo root: `npm run gas:login` → `npm run gas:push` → `npm run gas:deploy`. Full steps: [`docs/CLASP.md`](../docs/CLASP.md).
+
+---
+
 1. In Google Drive, open your spreadsheet (see [`docs/SPREADSHEET.md`](../docs/SPREADSHEET.md)).
 2. **Extensions → Apps Script**, delete any boilerplate, paste the contents of [`Code.gs`](Code.gs).
 3. In **Project Settings** (gear), not required for a single file, but you can set **Script time zone** to `Asia/Jerusalem` in `appsscript.json` if you use [clasp](https://github.com/google/clasp) to push this folder.

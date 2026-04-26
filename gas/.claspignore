@@ -1,0 +1,3 @@
+# Not pushed to Apps Script (clasp only uploads .gs, .html, .json, etc. per appsscript)
+README.md
+**/*.md
