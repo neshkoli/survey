@@ -1,8 +1,9 @@
 import "./style.css";
-import { fetchSchema, submitAnswers } from "./api";
+import { fetchResponses, fetchSchema, submitAnswers } from "./api";
 import { isLiveToSheets, resolveTabName } from "./config";
-import { getFormParam } from "./query";
+import { getFormParam, getResponsesParam } from "./query";
 import { renderSurvey, setSubmitLoading } from "./renderForm";
+import { renderResponses } from "./renderResponses";
 
 const appEl = document.getElementById("app");
 if (!appEl) throw new Error("missing #app");
@@ -98,6 +99,24 @@ function addDataSourceBanner(): void {
 }
 
 async function run(): Promise<void> {
+  const responsesParam = getResponsesParam();
+  if (responsesParam) {
+    const loading = document.createElement("div");
+    loading.className = "p-8 text-center";
+    loading.innerHTML =
+      '<span class="loading loading-spinner loading-lg" aria-label="טוען"></span><p class="mt-2 opacity-80">טוען תגובות…</p>';
+    app.appendChild(loading);
+
+    try {
+      const responses = await fetchResponses(responsesParam);
+      document.title = `תגובות: ${responses.title}`;
+      renderResponses(app, responses);
+    } catch (e) {
+      showError(e instanceof Error ? e.message : "שגיאה בטעינת התגובות");
+    }
+    return;
+  }
+
   const formParam = getFormParam();
   if (!formParam) {
     showNoFormState();

@@ -40,6 +40,9 @@ function handleRequest_(method, query, body) {
   if (method === "GET" && action === "schema") {
     return schema_(String(query.form || "").trim());
   }
+  if (method === "GET" && action === "responses") {
+    return responses_(String(query.form || "").trim());
+  }
   if (method === "POST" && (action === "submit" || (body && body.form && body.answers != null))) {
     if (!body || !body.form) {
       return jsonOut_({ error: "bad_request", message: "form and answers required" }, 400);
@@ -103,6 +106,40 @@ function submit_(form, answers, body, query) {
   var row = [ts, form, JSON.stringify(norm)];
   respSh.appendRow(row);
   return jsonOut_({ ok: true }, 200);
+}
+
+function responses_(form) {
+  if (!form) {
+    return jsonOut_({ error: "bad_request", message: "form parameter required" }, 400);
+  }
+  var ss = getSpreadsheet_();
+  var sh = ss.getSheetByName(form);
+  if (!sh) {
+    return jsonOut_({ error: "not_found", message: "form tab not found" }, 404);
+  }
+  var def = getFormDefinition_(sh);
+  var respSh = ss.getSheetByName(CONFIG.responsesTab);
+  if (!respSh) {
+    return jsonOut_({ form: form, title: def.title || "Survey", fields: def.fields || [], rows: [] }, 200);
+  }
+
+  var values = respSh.getDataRange().getValues();
+  var rows = [];
+  for (var i = 1; i < values.length; i++) {
+    var row = values[i];
+    var answers = {};
+    try {
+      answers = JSON.parse(String(row[2] || "{}"));
+    } catch (err) {
+      answers = {};
+    }
+    rows.push({
+      timestamp: row[0] instanceof Date ? row[0].toISOString() : String(row[0] || ""),
+      answers: ensurePlainObject_(answers),
+    });
+  }
+
+  return jsonOut_({ form: form, title: def.title || "Survey", fields: def.fields || [], rows: rows }, 200);
 }
 
 function requireTokenIfSet_(body, query) {

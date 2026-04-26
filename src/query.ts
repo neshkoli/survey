@@ -10,3 +10,10 @@ export function getFormParam(): string | null {
 
   return pathForm || null;
 }
+
+export function getResponsesParam(): string | null {
+  const q = new URLSearchParams(window.location.search);
+  const responses = q.get("responses");
+  if (!responses?.trim()) return null;
+  return responses.trim();
+}

@@ -29,3 +29,15 @@ export interface SurveySchema {
 }
 
 export type Answers = Record<string, string | number | boolean>;
+
+export interface ResponseRow {
+  timestamp: string;
+  answers: Answers;
+}
+
+export interface ResponsesPayload {
+  form: string;
+  title: string;
+  fields: FieldDef[];
+  rows: ResponseRow[];
+}
