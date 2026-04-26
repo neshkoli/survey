@@ -4,6 +4,8 @@
 
 **אתר חי (GitHub Pages):** [https://neshkoli.github.io/survey/](https://neshkoli.github.io/survey/?form=libi) — קוד: [neshkoli/survey](https://github.com/neshkoli/survey).
 
+**אם מופיע בקונסול `[submit] DRY-RUN`:** האתר נבנה בלי `VITE_GAS_BASE_URL`. זה **לא** נפתר ב־`gcloud` (Apps Script != GCP). הוראות מלאות: [`docs/FIX_DRY_RUN.md`](docs/FIX_DRY_RUN.md) — Web App + secret ב־GitHub + build מחדש.
+
 ## פיתוח
 
 ```bash
