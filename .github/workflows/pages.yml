@@ -29,6 +29,7 @@ jobs:
           npm run build
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_PAGES_CUSTOM_DOMAIN: survey.eshkoli.com
           VITE_GAS_BASE_URL: ${{ secrets.VITE_GAS_BASE_URL }}
           VITE_SUBMIT_TOKEN: ${{ secrets.VITE_SUBMIT_TOKEN }}
       - uses: actions/upload-pages-artifact@v3

@@ -66,10 +66,31 @@ function readValue(
   return undefined;
 }
 
+function appendMarkdownBoldText(parent: HTMLElement, text: string): void {
+  const re = /\*([^*\n]+)\*/g;
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = re.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parent.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+    }
+    const strong = document.createElement("strong");
+    strong.className = "font-bold";
+    strong.textContent = match[1];
+    parent.appendChild(strong);
+    lastIndex = re.lastIndex;
+  }
+
+  if (lastIndex < text.length) {
+    parent.appendChild(document.createTextNode(text.slice(lastIndex)));
+  }
+}
+
 function helpNode(text: string): HTMLElement {
   const d = document.createElement("div");
   d.className = "label-text-alt opacity-70 text-right mt-1";
-  d.textContent = text;
+  appendMarkdownBoldText(d, text);
   return d;
 }
 
@@ -202,7 +223,7 @@ export function renderSurvey(
     const p = document.createElement("p");
     p.className =
       "opacity-80 whitespace-pre-line text-right leading-relaxed mt-3";
-    p.textContent = schema.subtitle;
+    appendMarkdownBoldText(p, schema.subtitle);
     head.appendChild(p);
   }
   wrap.appendChild(head);
@@ -237,7 +258,7 @@ export function renderSurvey(
     const foot = document.createElement("div");
     foot.className =
       "max-w-none text-center text-base mt-2 whitespace-pre-line text-primary/90 font-medium";
-    foot.textContent = schema.footerText;
+    appendMarkdownBoldText(foot, schema.footerText);
     wrap.appendChild(foot);
   }
   outer.appendChild(wrap);

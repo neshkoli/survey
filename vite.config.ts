@@ -1,7 +1,10 @@
 import { defineConfig } from "vite";
 
-// In GitHub Actions, GITHUB_REPOSITORY is "owner/repo" — project Pages need /repo/ base.
+// Custom-domain Pages are served from the domain root; project Pages need /repo/.
 const base = (() => {
+  if (process.env.GITHUB_PAGES_CUSTOM_DOMAIN) {
+    return "/";
+  }
   const r = process.env.GITHUB_REPOSITORY;
   if (r) {
     const name = r.split("/")[1];
