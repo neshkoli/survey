@@ -49,7 +49,7 @@ function showSuccess(): void {
   wrap.className = "p-4 max-w-2xl mx-auto";
   const a = document.createElement("div");
   a.setAttribute("role", "alert");
-  a.className = "alert alert-success text-right";
+  a.className = "survey-card rounded-2xl px-6 py-5 text-center font-medium text-primary";
   const span = document.createElement("span");
   span.textContent = "התשובה נשלחה. תודה רבה!";
   a.appendChild(span);
