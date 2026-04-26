@@ -2,6 +2,8 @@
 
 אתר סטטי (Vite + Tailwind + [daisyUI](https://daisyui.com/)) לטפסים, ממשק **עברית** (RTL) ו-`?form=` בכתובת. אחסון מול **Google Sheets** דרך **Google Apps Script** (ראו [`gas/`](gas/) ו-[`PLAN.md`](PLAN.md)).
 
+**אתר חי (GitHub Pages):** [https://neshkoli.github.io/survey/](https://neshkoli.github.io/survey/?form=libi) — קוד: [neshkoli/survey](https://github.com/neshkoli/survey).
+
 ## פיתוח
 
 ```bash
